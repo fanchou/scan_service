@@ -1,7 +1,8 @@
 name: scan_service
 description: A new Flutter plugin project.
-version: 0.0.1
-homepage:
+version: 0.0.2
+homepage: https://github.com/fanchou/scan_service
+repository: https://github.com/your/repository
 
 environment:
   sdk: '>=2.19.6 <3.0.0'

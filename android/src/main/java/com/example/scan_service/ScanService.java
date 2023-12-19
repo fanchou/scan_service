@@ -56,11 +56,18 @@ public class ScanService extends AccessibilityService {
     if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
       analysisKeyEvent(event);
     }
-    if(onKeyEvent != null){
-      //这里通过回调的方式将事件传出去统一处理
-      //返回true事件就会拦截不会继续传递
-      return onKeyEvent.onKeyEvent(event);
+
+    // 如果判断为扫码时则拦截输入
+    if(isInputFromScanner(getApplicationContext(), event)){
+      return true;
     }
+//
+//    if(onKeyEvent != null){
+//      //这里通过回调的方式将事件传出去统一处理
+//      //返回true事件就会拦截不会继续传递
+//      // todo 尝试拦截回车看看是否有用
+//      return onKeyEvent.onKeyEvent(event);
+//    }
     return super.onKeyEvent(event);
   }
 
