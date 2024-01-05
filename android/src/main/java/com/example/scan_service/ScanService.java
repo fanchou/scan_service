@@ -55,7 +55,7 @@ public class ScanService extends AccessibilityService {
   protected boolean onKeyEvent(KeyEvent event) {
 
     // TODO 暂时用一个比较hack的方式区分键盘和扫码枪
-    if(event.getAction() == KeyEvent.ACTION_DOWN && !event.getDevice().getName().contains("Keyboard")) {
+    if(event.getAction() == KeyEvent.ACTION_DOWN && (!event.getDevice().getName().contains("Keyboard") || !event.getDevice().getName().contains("keyboard"))) {
       if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
         analysisKeyEvent(event);
         return true;
