@@ -53,14 +53,24 @@ public class ScanService extends AccessibilityService {
 
   @Override
   protected boolean onKeyEvent(KeyEvent event) {
-    if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
-      analysisKeyEvent(event);
+
+    // TODO 暂时用一个比较hack的方式区分键盘和扫码枪
+    if(event.getAction() == KeyEvent.ACTION_DOWN && !event.getDevice().getName().contains("Keyboard")) {
+      if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
+        analysisKeyEvent(event);
+        return true;
+      }
     }
 
-    // 如果判断为扫码时则拦截输入
-    if(isInputFromScanner(getApplicationContext(), event)){
-      return true;
-    }
+
+//    if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
+//      analysisKeyEvent(event);
+//    }
+//
+//    // 如果判断为扫码时则拦截输入
+//    if(isInputFromScanner(getApplicationContext(), event)){
+//      return true;
+//    }
 //
 //    if(onKeyEvent != null){
 //      //这里通过回调的方式将事件传出去统一处理
