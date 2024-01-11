@@ -54,7 +54,7 @@ public class ScanService extends AccessibilityService {
   private boolean isKeyboard(String name) {
     if(name.contains("Keyboard") || name.contains("keyboard")) {
       // todo 这里以后可能有更多的兼容性，最好弄成一个List
-      if(name.contains("WCM")) {
+      if (name.contains("WCM")) {
         return false;
       } else {
         return true;
@@ -67,6 +67,9 @@ public class ScanService extends AccessibilityService {
 
   @Override
   protected boolean onKeyEvent(KeyEvent event) {
+
+    //字母大小写判断
+    checkLetterStatus(event);
 
     if(event.getAction() == KeyEvent.ACTION_DOWN && !isKeyboard(event.getDevice().getName())) {
       if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
@@ -137,8 +140,6 @@ public class ScanService extends AccessibilityService {
 
     int keyCode = event.getKeyCode();
 
-    //字母大小写判断
-    checkLetterStatus(event);
 
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
@@ -151,6 +152,7 @@ public class ScanService extends AccessibilityService {
 
       if (keyCode == KeyEvent.KEYCODE_ENTER) {
         //若为回车键，直接返回
+        mCaps = false;
         mHandler.removeCallbacks(mScanningFishedRunnable);
         mHandler.post(mScanningFishedRunnable);
       } else {
@@ -167,7 +169,11 @@ public class ScanService extends AccessibilityService {
     int keyCode = event.getKeyCode();
     if (keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT || keyCode == KeyEvent.KEYCODE_SHIFT_LEFT) {
       //按着shift键，表示大写
-      mCaps = event.getAction() == KeyEvent.ACTION_DOWN;
+      if(event.getAction() == KeyEvent.ACTION_DOWN) {
+        mCaps = true;
+      } else {
+        mCaps = false;
+      }
     }
   }
 
