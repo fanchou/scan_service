@@ -50,12 +50,25 @@ public class ScanService extends AccessibilityService {
     boolean onKeyEvent(KeyEvent event);
   }
 
+  // TODO 暂时用一个比较hack的方式区分键盘和扫码枪
+  private boolean isKeyboard(String name) {
+    if(name.contains("Keyboard") || name.contains("keyboard")) {
+      // todo 这里以后可能有更多的兼容性，最好弄成一个List
+      if(name.contains("WCM")) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
 
   @Override
   protected boolean onKeyEvent(KeyEvent event) {
 
-    // TODO 暂时用一个比较hack的方式区分键盘和扫码枪
-    if(event.getAction() == KeyEvent.ACTION_DOWN && (!event.getDevice().getName().contains("Keyboard") && !event.getDevice().getName().contains("keyboard"))) {
+    if(event.getAction() == KeyEvent.ACTION_DOWN && !isKeyboard(event.getDevice().getName())) {
       if(isInputFromScanner(getApplication().getApplicationContext(), event)) {
         analysisKeyEvent(event);
         return true;
